@@ -23,6 +23,9 @@ exports.signup = async (req, res, next) => {
     if (!req.body) {
       return next(new Error('Data is mandatory the body!'));
     }
+    // Check for duplicate Email
+    const emailExist = await User.findOne({ email: req.body.email });
+    if (emailExist) return res.status(400).json({status: 'failed', data: `Email Already Exist`});
 
     const data = await User.create(req.body);
 
